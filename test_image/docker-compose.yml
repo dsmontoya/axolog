@@ -1,0 +1,6 @@
+version: '3'
+services:
+  test-1:
+    image: dsmontoya/axolog-test
+  test-2:
+    image: dsmontoya/axolog-test
