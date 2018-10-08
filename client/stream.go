@@ -46,7 +46,6 @@ func (s *Stream) Write(p []byte) (int, error) {
 		log.Error(err)
 		return 0, err
 	}
-	log.Info(string(b))
 	if _, err = s.conn.Write(b); err != nil {
 		log.Error(err)
 		return 0, err
