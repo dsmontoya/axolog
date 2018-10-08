@@ -3,32 +3,33 @@ package client
 import (
 	"encoding/json"
 	"net"
-	"net/url"
+
+	log "github.com/sirupsen/logrus"
 )
 
 type Data struct {
 	Message   string     `json:"message"`
-	Container *Container `json:"docker"`
+	Container *Container `json:"-,"`
 }
 
 type Stream struct {
 	Container *Container
-	URI       *url.URL
+	conn      net.Conn
 }
 
 func (s *Stream) Write(p []byte) (int, error) {
-	conn, err := net.Dial(s.URI.Scheme, s.URI.Host)
-	if err != nil {
-		return 0, err
-	}
-	defer conn.Close()
 	data := &Data{
 		Message:   string(p),
 		Container: s.Container,
 	}
 	b, err := json.Marshal(data)
 	if err != nil {
+		log.Error(err)
 		return 0, err
 	}
-	return conn.Write(b)
+	if _, err = s.conn.Write(b); err != nil {
+		log.Error(err)
+		return 0, err
+	}
+	return len(p), nil
 }

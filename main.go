@@ -2,11 +2,12 @@ package main
 
 import (
 	"github.com/dsmontoya/axolog/client"
+	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
 
 func main() {
-
+	log.SetFormatter(&log.TextFormatter{FullTimestamp: true})
 	rootCmd := &cobra.Command{
 		Use:   "axolog",
 		Short: "Docker log router",

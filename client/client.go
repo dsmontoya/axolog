@@ -52,23 +52,28 @@ func (c *Client) RegisterContainers() error {
 	return nil
 }
 
-func (c *Client) Logs(container *Container) {
-	if err := c.c.Logs(docker.LogsOptions{
-		Container:         container.ID,
-		Stdout:            true,
-		Stderr:            true,
-		OutputStream:      container.Stream(c.URI),
-		ErrorStream:       container.Stream(c.URI),
-		Follow:            true,
-		InactivityTimeout: 1 * time.Minute,
-		Since:             time.Now().Unix(),
-	}); err != nil {
-		if err == docker.ErrInactivityTimeout {
-			log.Infof("removed due to inactivity.\n", container.ID)
-			return
-		}
-		log.Errorf("unable to read logs from %s: %s\n", container.Name, err)
+func (c *Client) Logs(container *Container) error {
+	outputStream, err := container.Stream(c.URI)
+	if err != nil {
+		return err
 	}
+	errorStream, err := container.Stream(c.URI)
+	if err != nil {
+		return err
+	}
+	if err := c.c.Logs(docker.LogsOptions{
+		Container:    container.ID,
+		Stdout:       true,
+		Stderr:       true,
+		OutputStream: outputStream,
+		ErrorStream:  errorStream,
+		Follow:       true,
+		Since:        time.Now().Unix(),
+	}); err != nil {
+		log.Errorf("unable to read logs from %s: %s\n", container.Name, err)
+		return err
+	}
+	return nil
 }
 
 func (c *Client) ListenEvents() error {

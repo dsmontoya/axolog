@@ -1,20 +1,27 @@
 package client
 
-import "net/url"
+import (
+	"net"
+	"net/url"
+)
 
 type Container struct {
-	ID     string            `json:"id"`
-	Image  string            `json:"image"`
-	State  string            `json:"state"`
-	Status string            `json:"status"`
-	Name   string            `json:"name"`
-	Labels map[string]string `json:"labels"`
+	ID     string            `json:"docker.id"`
+	Image  string            `json:"docker.image"`
+	State  string            `json:"docker.state"`
+	Status string            `json:"docker.status"`
+	Name   string            `json:"docker.name"`
+	Labels map[string]string `json:"docker.labels"`
 }
 
 type Containers map[string]*Container
 
-func (c *Container) Stream(uri *url.URL) *Stream {
-	return &Stream{c, uri}
+func (c *Container) Stream(uri *url.URL) (*Stream, error) {
+	conn, err := net.Dial(uri.Scheme, uri.Host)
+	if err != nil {
+		return nil, err
+	}
+	return &Stream{c, conn}, nil
 }
 
 func (c Containers) Remove(id string) {
