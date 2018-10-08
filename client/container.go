@@ -6,12 +6,12 @@ import (
 )
 
 type Container struct {
-	ID     string            `json:"docker.id"`
-	Image  string            `json:"docker.image"`
-	State  string            `json:"docker.state"`
-	Status string            `json:"docker.status"`
-	Name   string            `json:"docker.name"`
-	Labels map[string]string `json:"docker.labels"`
+	ID     string            `id`
+	Image  string            `image`
+	State  string            `state`
+	Status string            `status`
+	Name   string            `name`
+	Labels map[string]string `labels`
 }
 
 type Containers map[string]*Container
