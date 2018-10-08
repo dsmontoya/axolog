@@ -3,12 +3,12 @@ package client
 import "net/url"
 
 type Container struct {
-	ID     string
-	Image  string
-	State  string
-	Status string
-	Name   string
-	Labels map[string]string
+	ID     string            `json:"id"`
+	Image  string            `json:"image"`
+	State  string            `json:"state"`
+	Status string            `json:"status"`
+	Name   string            `json:"name"`
+	Labels map[string]string `json:"labels"`
 }
 
 type Containers map[string]*Container

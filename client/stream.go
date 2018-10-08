@@ -1,9 +1,15 @@
 package client
 
 import (
+	"encoding/json"
 	"net"
 	"net/url"
 )
+
+type Data struct {
+	Message   string     `json:"message"`
+	Container *Container `json:"docker"`
+}
 
 type Stream struct {
 	Container *Container
@@ -16,7 +22,13 @@ func (s *Stream) Write(p []byte) (int, error) {
 		return 0, err
 	}
 	defer conn.Close()
-
-	//simple write
-	return conn.Write(p)
+	data := &Data{
+		Message:   string(p),
+		Container: s.Container,
+	}
+	b, err := json.Marshal(data)
+	if err != nil {
+		return 0, err
+	}
+	return conn.Write(b)
 }
