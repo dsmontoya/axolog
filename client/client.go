@@ -37,7 +37,7 @@ func (c *Client) RegisterContainers() error {
 	if err != nil {
 		return err
 	}
-	log.Infof("Found %d containers \n", len(containers))
+	log.Infof("Found %d containers", len(containers))
 	time.Sleep(2 * time.Second)
 	for _, container := range containers {
 		c.Containers[container.ID] = &Container{
@@ -70,7 +70,7 @@ func (c *Client) Logs(container *Container) error {
 		Follow:       true,
 		Since:        time.Now().Unix(),
 	}); err != nil {
-		log.Errorf("unable to read logs from %s: %s\n", container.Name, err)
+		log.Errorf("unable to read logs from %s: %s", container.Name, err)
 		return err
 	}
 	return nil
