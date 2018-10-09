@@ -49,5 +49,6 @@ func (s *Stream) Write(p []byte) (int, error) {
 	if _, err = s.conn.Write(b); err != nil {
 		log.Errorf("%s: %s | bytes size %d", s.Container.Name, err, len(b))
 	}
+	log.Debugf("Log sent from %s. Log size %d. Final message size %d.", s.Container.Name, len(p), len(b))
 	return len(p), nil
 }
