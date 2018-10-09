@@ -61,6 +61,7 @@ func (c *Client) Logs(container *Container) error {
 	if err != nil {
 		return err
 	}
+	log.Infof("Reading logs from %s", container.Name)
 	if err := c.c.Logs(docker.LogsOptions{
 		Container:    container.ID,
 		Stdout:       true,
